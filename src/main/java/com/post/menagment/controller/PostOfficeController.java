@@ -27,7 +27,6 @@ public class PostOfficeController {
 
     @RequestMapping(value = "/isPostOfficeAvailable/{postOfficeId}", method = RequestMethod.GET)
     public boolean isPostOfficeAvailable(@PathVariable long postOfficeId) {
-        System.out.println("=======================");
         return postOfficeService.isPostOfficeAvailable(postOfficeId);
     }
 

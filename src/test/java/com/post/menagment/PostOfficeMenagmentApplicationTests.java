@@ -1,4 +1,4 @@
-package com.post.PostOfficeMenagment;
+package com.post.menagment;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

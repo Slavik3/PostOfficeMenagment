@@ -1,4 +1,4 @@
-package com.post.PostOfficeMenagment;
+package com.post.menagment;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

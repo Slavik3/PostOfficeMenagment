@@ -9,14 +9,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PostOfficeController {
 
-    @Autowired
     private PostOfficeService postOfficeService;
 
+    @Autowired
+    public PostOfficeController(PostOfficeService postOfficeService) {
+        this.postOfficeService = postOfficeService;
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public HttpStatus addNewPostOffice(@RequestBody PostOffice postOffice) {
         postOfficeService.create(postOffice);
-        return HttpStatus.OK;
+        return HttpStatus.CREATED;
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
@@ -26,7 +29,7 @@ public class PostOfficeController {
     }
 
     @RequestMapping(value = "/isPostOfficeAvailable/{postOfficeId}", method = RequestMethod.GET)
-    public boolean isPostOfficeAvailable(@PathVariable long postOfficeId) {
+    public boolean isPostOfficeAvailable(@PathVariable Long postOfficeId) {
         return postOfficeService.isPostOfficeAvailable(postOfficeId);
     }
 

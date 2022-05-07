@@ -8,8 +8,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostOfficeServiceImpl implements PostOfficeService{
 
-    @Autowired
     private PostOfficeRepository postOfficeRepository;
+
+    @Autowired
+    public PostOfficeServiceImpl(PostOfficeRepository postOfficeRepository) {
+        this.postOfficeRepository = postOfficeRepository;
+    }
 
     @Override
     public boolean isPostOfficeAvailable(long postOfficeId) {

@@ -16,7 +16,7 @@ public class PostOfficeServiceImpl implements PostOfficeService{
     }
 
     @Override
-    public boolean isPostOfficeAvailable(long postOfficeId) {
+    public boolean isPostOfficeAvailable(Long postOfficeId) {
         if(postOfficeRepository.existsById(postOfficeId)) {
             PostOffice postOffice = postOfficeRepository.getById(postOfficeId);
             return postOffice.getIsWorking();

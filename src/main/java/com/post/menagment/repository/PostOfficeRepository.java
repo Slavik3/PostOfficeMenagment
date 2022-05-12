@@ -1,6 +1,6 @@
 package com.post.menagment.repository;
 
-import com.post.menagment.model.PostOffice;
+import com.post.menagment.dto.PostOffice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

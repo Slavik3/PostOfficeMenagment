@@ -27,3 +27,8 @@ release.properties
 
 mvnw.cmd
 mvnw
+
+### Eclipse ###
+.classpath
+.project
+.settings/

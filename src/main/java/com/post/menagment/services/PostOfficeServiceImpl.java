@@ -1,6 +1,6 @@
 package com.post.menagment.services;
 
-import com.post.menagment.model.PostOffice;
+import com.post.menagment.dto.PostOffice;
 import com.post.menagment.repository.PostOfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,9 @@ public class PostOfficeServiceImpl implements PostOfficeService{
     }
 
     @Override
-    public boolean isPostOfficeAvailable(Long postOfficeId) {
-        if(postOfficeRepository.existsById(postOfficeId)) {
-            PostOffice postOffice = postOfficeRepository.getById(postOfficeId);
+    public boolean isPostOfficeAvailable(Long id) {
+        if(postOfficeRepository.existsById(id)) {
+            PostOffice postOffice = postOfficeRepository.getById(id);
             return postOffice.getIsWorking();
         }
         else return false;

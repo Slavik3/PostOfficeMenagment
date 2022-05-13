@@ -1,6 +1,6 @@
 package com.post.menagment.services;
 
-import com.post.menagment.dto.PostOffice;
+import com.post.menagment.model.PostOffice;
 
 
 public interface PostOfficeService {

@@ -1,6 +1,6 @@
 package com.post.menagment.services;
 
-import com.post.menagment.dto.PostOffice;
+import com.post.menagment.model.PostOffice;
 import com.post.menagment.repository.PostOfficeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

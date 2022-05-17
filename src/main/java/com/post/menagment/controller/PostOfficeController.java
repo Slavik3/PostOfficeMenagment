@@ -37,7 +37,7 @@ public class PostOfficeController {
         return HttpStatus.OK;
     }
 
-    @RequestMapping(value = "/post_office/{id}/availability", method = RequestMethod.GET)
+    @RequestMapping(value = "/post-office/{id}/availability", method = RequestMethod.GET)
     public boolean isPostOfficeAvailable(@PathVariable Long id) {
         return postOfficeService.isPostOfficeAvailable(id);
     }

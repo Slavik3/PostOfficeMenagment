@@ -2,14 +2,34 @@ version: '3'
 
 services:
 
-  database:
-
-    image: 'postgres:latest'
-
+  db:
+    image: 'postgres:13.1-alpine'
     ports:
       - 5432:5432
-
+    container_name: post_office_menagment_db
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 12345
-      POSTGRES_DB: post_office_menagment
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=post_office_menagment
+    networks:
+      - post
+
+  app:
+    image: 'post_office_menagment_image'
+    ports:
+      - 8081:8081
+    build:
+      context: .
+    container_name: post_office_menagment_app
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/post_office_menagment
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - post
+networks:
+  post:
+    external: true

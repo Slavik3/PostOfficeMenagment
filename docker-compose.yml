@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
 
-  db:
+  db_post_office:
     image: 'postgres:13.1-alpine'
     ports:
       - 5432:5432
@@ -20,7 +20,7 @@ services:
       dockerfile: PostOfficeMenagment/Dockerfile
     container_name: 'post-office-app'
     depends_on:
-      - db
+      - db_post_office
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/post_office_menagment
       - SPRING_DATASOURCE_USERNAME=postgres

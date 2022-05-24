@@ -6,7 +6,6 @@ services:
     image: 'postgres:13.1-alpine'
     ports:
       - 5432:5432
-    #container_name: post_office_menagment_db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=12345
@@ -15,13 +14,13 @@ services:
       - post
 
   post_office_app:
-    image: 'post_office_menagment_image'
+    image: post_office_app
     ports:
       - 8081:8081
     build:
       context: .
       dockerfile: PostOfficeMenagment/Dockerfile
-    #container_name: post_office_menagment_app
+    container_name: 'post_office_app'
     depends_on:
       - db
     environment:
@@ -36,7 +35,6 @@ services:
     image: 'postgres:13.1-alpine'
     ports:
       - 5433:5432
-    #container_name: parcel_registration_db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=12345
@@ -45,9 +43,10 @@ services:
       - post
 
   parcel_registration_app:
-    image: 'parcel_registration_image'
+    image: parcel_registration_app
     ports:
       - 8082:8082
+    container_name: 'parcel_registration_app'
     build:
       context: .
       dockerfile: ParcelRegistration/Dockerfile

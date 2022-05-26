@@ -1,0 +1,54 @@
+version: "3.2"
+
+services:
+
+  db_post_office:
+    image: 'postgres:13.1-alpine'
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=post_office_menagment
+
+  post-office-app:
+    image: post-office-app
+    ports:
+      - 8081:8081
+    build:
+      context: .
+      dockerfile: PostOfficeMenagment/Dockerfile
+    container_name: 'post-office-app'
+    depends_on:
+      - db_post_office
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/post_office_menagment
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  db_parcel_registration:
+    image: 'postgres:13.1-alpine'
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=parcel_registration
+
+  parcel-registration-app:
+    image: parcel-registration-app
+    ports:
+      - 8082:8082
+    container_name: 'parcel-registration-app'
+    build:
+      context: .
+      dockerfile: ParcelRegistration/Dockerfile
+    depends_on:
+      - db_parcel_registration
+      - post-office-app
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db_parcel_registration:5432/parcel_registration
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update

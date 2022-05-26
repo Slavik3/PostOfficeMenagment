@@ -1,0 +1,33 @@
+apiVersion: v1 # Kubernetes API version
+kind: Deployment # Kubernetes resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: post-office-service
+spec:
+  selector:
+    app: post-office-app
+  ports:
+    - protocol: "TCP"
+      port: 8081 # The port that the service is running on in the cluster
+      targetPort: 8081 # The port exposed by the service
+  type: LoadBalancer # type of the service. LoadBalancer indicates that our service will be external.
+---
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: post-office-app
+spec:
+  selector:
+    matchLabels:
+      app: post-office-app
+  replicas: 4 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: post-office-app
+    spec:
+      containers:
+        - name: post-office-app
+          image: post-office-app # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081 # The port that the container is running on in the cluster

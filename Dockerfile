@@ -5,4 +5,3 @@ RUN sh -c 'touch PostOfficeMenagment-0.0.1-SNAPSHOT.jar'
 ARG PORT=8081
 EXPOSE ${PORT}
 ENTRYPOINT ["java","-jar","PostOfficeMenagment-0.0.1-SNAPSHOT.jar"]
-EXPOSE 8081

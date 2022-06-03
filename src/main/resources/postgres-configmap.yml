@@ -4,4 +4,4 @@ metadata:
   name: postgres-conf
 data:
   host: postgres
-  name: employeedb
+  name: post_office_menagment

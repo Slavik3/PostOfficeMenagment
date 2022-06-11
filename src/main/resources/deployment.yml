@@ -1,9 +1,9 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: springboot-postgres-k8s
+  name: post-office-menagment
   labels:
-    name: springboot-postgres-k8s
+    name: post-office-menagment
 spec:
   ports:
     - nodePort: 30163
@@ -11,27 +11,27 @@ spec:
       targetPort: 8080
       protocol: TCP
   selector:
-    app: springboot-postgres-k8s
+    app: post-office-menagment
   type: NodePort
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-postgres-k8s
+  name: post-office-menagment
 spec:
   selector:
     matchLabels:
-      app: springboot-postgres-k8s
+      app: post-office-menagment
   replicas: 3
   template:
     metadata:
       labels:
-        app: springboot-postgres-k8s
+        app: post-office-menagment
     spec:
       containers:
-        - name: springboot-postgres-k8s
-          image: springboot-postgres-k8s:1.0
+        - name: post-office-menagment
+          image: post-office-menagment:1.0
           ports:
             - containerPort: 8080
           env:   # Setting Enviornmental Variables

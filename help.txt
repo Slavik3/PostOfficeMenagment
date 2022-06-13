@@ -86,6 +86,8 @@ get http://192.168.59.100:30163/post-office/1/availability
 post http://192.168.59.100:30163/post-office
 
 https://www.enterprisedb.com/blog/how-deploy-pgadmin-kubernetes - add pgAdminn
+user@domain.com
+SuperSecret
 
 
 CREATE TABLE post_office (

@@ -96,5 +96,5 @@ CREATE TABLE post_office (
 	is_working BOOLEAN);
 
 
-Докер - создает изолированное окружение для приложения.
-Кубернетис - управляет инфраструктурой докер контейниров
+Докер - creates an isolated environment for the application.
+Кубернетис - manages the docker container infrastructure

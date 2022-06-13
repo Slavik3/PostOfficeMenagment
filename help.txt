@@ -5,7 +5,6 @@ minikube start
 minikube dashboard
 eval $(minikube docker-env)
 
-
 mvn clean install -DskipTests=true
 docker build -t post-office-menagment:1.0 .
 
@@ -20,11 +19,7 @@ kubectl logs springboot-postgres-k8s-fb8667ff-4cqxw
 kubectl get services
 minikube service springboot-postgres-k8s --url
 
-
-
 kubectl exec -it postgres-bb9cb9b45-tk7r5 -- /bin/sh
-
-
 
 
 kubectl describe pod springboot-postgres-k8s-fb8667ff-6pn2f
@@ -37,27 +32,17 @@ psql -h postgres -U postgres
 psql -h 172.17.0.5 -p 5432 -U postgres -d post_office_menagment
 
 
-
 cpostgres-6df5844bdd-kv6rl -- /bin/bash
-
-
-
-
 
 
 cd /
 find * | grep postgresql.conf
 
 
-
-
-
-
 minikube start --vm-driver=virtualbox.  Стартуем minikube
 ./scripts/kube-dashboard.sh.     запускаем dashboard
 Загружаем образ
 scripts/kube-deploy.sh. Затеплить образ
-
 
 
 sudo lsof -i :5432
@@ -97,19 +82,10 @@ kubectl exec springboot-postgres-k8s-fb8667ff-8f664 -- printenv | grep SERVICE
 
 kubectl expose deployment springboot-postgres-k8s —name=springboot-postgres-k8s —port= 8080 —target-port=8080 —type=LoadBalancer
 
+get http://192.168.59.100:30163/post-office/1/availability
+post http://192.168.59.100:30163/post-office
 
-10.110.84.239 32750
-
-ERROR: relation "post_office" does not exist
-
-
-
-
-
-
-
-192.168.59.100:30163
-
+https://www.enterprisedb.com/blog/how-deploy-pgadmin-kubernetes - add pgAdminn
 
 
 CREATE TABLE post_office (

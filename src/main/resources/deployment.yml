@@ -38,12 +38,12 @@ spec:
             - name: DB_HOST   # Setting Database host address from configMap
               valueFrom:
                 configMapKeyRef:
-                  name: postgres-conf  # name of configMap
+                  name: postgres-conf-pom  # name of configMap
                   key: host
             - name: DB_NAME  # Setting Database name from configMap
               valueFrom:
                 configMapKeyRef:
-                  name: postgres-conf
+                  name: postgres-conf-pom
                   key: name
             - name: POSTGRES_USER  # Setting Database username from Secret
               valueFrom:

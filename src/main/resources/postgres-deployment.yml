@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pv-claim # name of PVC essential for identifying the storage data
+  name: postgres-pv-claim-pom # name of PVC essential for identifying the storage data
   labels:
     app: postgres
     tier: database
@@ -35,7 +35,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: postgres-post-office-menagment
   labels:
     app: postgres
     tier: database
@@ -70,7 +70,7 @@ spec:
             - name: POSTGRES_DB # Setting Database Name from a 'ConfigMap'
               valueFrom:
                 configMapKeyRef:
-                  name: postgres-conf
+                  name: postgres-conf-pom
                   key: name
 
           ports:
@@ -82,5 +82,5 @@ spec:
       volumes:
         - name: postgres-persistance-storage
           persistentVolumeClaim:
-            claimName: postgres-pv-claim
+            claimName: postgres-pv-claim-pom
 

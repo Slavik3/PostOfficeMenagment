@@ -7,8 +7,8 @@ metadata:
 spec:
   ports:
     - nodePort: 30163
-      port: 8080
-      targetPort: 8080
+      port: 8081
+      targetPort: 8081
       protocol: TCP
   selector:
     app: post-office-menagment
@@ -33,7 +33,7 @@ spec:
         - name: post-office-menagment
           image: post-office-menagment:1.0
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
           env:   # Setting Enviornmental Variables
             - name: DB_HOST   # Setting Database host address from configMap
               valueFrom:

@@ -7,4 +7,5 @@ public interface PostOfficeService {
     public boolean isPostOfficeAvailable(Long id);
     public void create(PostOffice postOffice);
     public void update(PostOffice postOffice);
+    public PostOffice getById(Long id);
 }

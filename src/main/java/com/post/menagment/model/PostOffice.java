@@ -37,4 +37,13 @@ public class PostOffice {
     public void setIsWorking(boolean working) {
         isWorking = working;
     }
+
+    @Override
+    public String toString() {
+        return "PostOffice{" +
+                "id=" + id +
+                ", adress='" + adress + '\'' +
+                ", isWorking=" + isWorking +
+                '}';
+    }
 }

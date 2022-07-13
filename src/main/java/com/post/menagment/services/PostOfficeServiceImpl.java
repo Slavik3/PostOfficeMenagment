@@ -33,4 +33,8 @@ public class PostOfficeServiceImpl implements PostOfficeService{
     public void update(PostOffice postOffice) {
         postOfficeRepository.save(postOffice);
     }
+
+    public PostOffice getById(Long id) {
+        return postOfficeRepository.getById(id);
+    }
 }

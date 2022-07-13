@@ -1,5 +1,6 @@
 package com.post.menagment;
 
+import com.post.menagment.services.ParcelRegistrationConsumer;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,6 +11,10 @@ public class PostOfficeMenagmentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PostOfficeMenagmentApplication.class, args);
+
+		/*Long id  = */ ParcelRegistrationConsumer parcelRegistrationConsumer= new ParcelRegistrationConsumer();
+		parcelRegistrationConsumer.consum();
+//PostOfficeService.isPostOfficeAvailable(id)
 	}
 
 	@Bean

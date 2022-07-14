@@ -17,7 +17,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 public class ParcelRegistrationCompletedProducer {
-    public static void send(PostOffice postOffice){
+    public static void send(PostOffice postOffice) {
         Properties props = null;
         {
             try {
@@ -38,6 +38,8 @@ public class ParcelRegistrationCompletedProducer {
         String key = "post-office";
 
         Producer<String, PostOffice> producer = new KafkaProducer<String, PostOffice>(props);
+        System.out.println("ParcelRegistrationCompletedProducer");
+        System.out.println("postOffice " + postOffice);
         producer.send(new ProducerRecord<String, PostOffice>(topic, key, postOffice), new Callback() {
             @Override
             public void onCompletion(RecordMetadata m, Exception e) {

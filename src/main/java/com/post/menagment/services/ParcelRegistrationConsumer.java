@@ -1,35 +1,64 @@
 package com.post.menagment.services;
 
-//import com.post.menagment.model.PostOffice;
-//import com.post.menagment.model.PostOffice;
+import com.google.gson.Gson;
 import com.post.menagment.model.Parcel;
 import com.post.menagment.model.PostOffice;
-import org.apache.kafka.clients.consumer.*;
-import io.confluent.kafka.serializers.KafkaJsonDeserializerConfig;
+import com.post.menagment.repository.PostOfficeRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 
-@Service
+import static java.util.stream.IntStream.range;
+
+@Log4j2
+@Component
+@RequiredArgsConstructor
 public class ParcelRegistrationConsumer {
 
-    @Autowired
-    private PostOfficeService postOfficeService;//null
+    private final KafkaTemplate<String, PostOffice> producer;
 
-    public void consum() {
+    @Autowired
+    private PostOfficeService postOfficeService;
+
+    @Transactional
+    @KafkaListener(topics = "parcelRegistrationTest")
+    public void consume(final ConsumerRecord<String, Parcel> parcel) {
+        Gson gson = new Gson();
+        Parcel p = gson.fromJson(String.valueOf(parcel.value()), Parcel.class);
+
+        log.info(".key()==> " + parcel.key());
+        log.info(".value()==> " + parcel.value());
+        Long idTo = p.getIdTo();
+        log.info("idTo==> " + idTo);
+        PostOffice postOffice = postOfficeService.getById(idTo);
+        log.info("postOffice"+postOffice);
+
+        produce(postOffice);
+
+        System.out.println("----");
+    }
+
+
+    public static void produce(PostOffice postOffice) {
+        System.out.println("PostOfficeRegistrationProducer.send");
         Properties props = null;
-        Long parcelIdTo = null;
         {
             try {
                 props = loadConfig("src/main/resources/java.config");
@@ -38,54 +67,32 @@ public class ParcelRegistrationConsumer {
             }
         }
 
-
+        String topic="postOffice";
         // Add additional properties.
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaJsonDeserializer");
-        props.put(KafkaJsonDeserializerConfig.JSON_VALUE_TYPE, Parcel.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "demo-consumer-1");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ProducerConfig.ACKS_CONFIG, "all");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaJsonSerializer");
 
-        final Consumer<String, Parcel> consumer = new KafkaConsumer<String, Parcel>(props);
-        String topic="parcelRegistrationTest";
-        consumer.subscribe(Arrays.asList(topic));
+        Producer<String, PostOffice> producer = new KafkaProducer<String, PostOffice>(props);
 
-        Long total_count = 0L;
+        String key = "postOfficeKey";
 
-
-        try {
-            while (true) {
-                ConsumerRecords<String, Parcel> records = consumer.poll(Duration.ofMillis(100));
-                for (ConsumerRecord<String, Parcel> record : records) {
-                    String key = record.key();
-                    Parcel parcel = record.value();
-                    //total_count += value.getCount();
-                    //parcelIdTo=value;
-                    System.out.printf("Consumed record with key %s and value %s", key, parcel);
-
-                    //boolean isPostOfficeAvailable = postOfficeService.isPostOfficeAvailable(parcel.getIdTo());
-
-                    PostOffice postOffice = postOfficeService.getById(parcel.getIdTo());
-                    System.out.println("postOffice==> " + postOffice);
-                    //TODO get PostOffice
-                    //if(isPostOfficeAvailable)
-                        ParcelRegistrationCompletedProducer.send(postOffice);
-
+        System.out.printf("Producing record: %s\t%s%n", key, postOffice);
+        producer.send(new ProducerRecord<String, PostOffice>(topic, key, postOffice), new Callback() {
+            @Override
+            public void onCompletion(RecordMetadata m, Exception e) {
+                if (e != null) {
+                    e.printStackTrace();
+                } else {
+                    System.out.printf("Produced record to topic %s partition [%d] @ offset %d%n", m.topic(), m.partition(), m.offset());
                 }
             }
-        } finally {
-            consumer.close();
-            //return parcelIdTo;//?
-        }
+        });
 
+        producer.flush();
 
-//перевіритит чи евейлебл
-        //якщо евейлбл створити івент і відправити цей рекорд з статтусом ок
-        //або зі сттатусом фейлд
+        producer.close();
     }
-
-
-
 
     public static Properties loadConfig(final String configFile) throws IOException {
         if (!Files.exists(Paths.get(configFile))) {
@@ -97,5 +104,28 @@ public class ParcelRegistrationConsumer {
         }
         return cfg;
     }
+
+
+
+    /*public void produce(PostOffice postOffice) {
+        System.out.println("ProducerExample");
+            final String key = "postOfficeKey";
+            log.info("Producing record: {}\t{}", key, postOffice);
+            producer.send("postOffice", key, postOffice).addCallback(
+                    result -> {
+                        final RecordMetadata m;
+                        if (result != null) {
+                            m = result.getRecordMetadata();
+                            log.info("Produced record to topic {} partition {} @ offset {}",
+                                    m.topic(),
+                                    m.partition(),
+                                    m.offset());
+                        }
+                    },
+                    exception -> log.error("Failed to produce to kafka", exception));
+        producer.flush();
+        log.info("10 messages were produced to topic {}", "ttt");
+    }*/
+
 
 }

@@ -1,21 +1,15 @@
-package com.post.menagment.model;
+package com.post.menagment.dto;
 
-import javax.persistence.*;
-
-@Entity
 public class Parcel {
-    @Id
-    @GeneratedValue
+
     private Long id;
     private String name;
     private int weight;
     private long idFrom;
     private long idTo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private Sender sender;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private Recipient recipient;
 
     public long getId() {

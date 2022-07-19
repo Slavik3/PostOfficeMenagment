@@ -1,7 +1,8 @@
 package com.post.menagment.services;
 
 import com.google.gson.Gson;
-import com.post.menagment.model.Parcel;
+import com.post.menagment.dto.PostOfficeDTO;
+import com.post.menagment.dto.Parcel;
 import com.post.menagment.model.PostOffice;
 import com.post.menagment.repository.PostOfficeRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileInputStream;
@@ -28,14 +30,22 @@ import java.util.Properties;
 import static java.util.stream.IntStream.range;
 
 @Log4j2
-@Component
+@Service
 @RequiredArgsConstructor
 public class ParcelRegistrationConsumer {
 
-    private final KafkaTemplate<String, PostOffice> producer;
+    //private final KafkaTemplate<String, PostOffice> producer;
+
+    private PostOfficeService postOfficeService;
+    private ModelMapper modelMapper;
 
     @Autowired
-    private PostOfficeService postOfficeService;
+    public ParcelRegistrationConsumer(PostOfficeService postOfficeService, ModelMapper modelMapper) {
+        this.postOfficeService = postOfficeService;
+        this.modelMapper = modelMapper;
+    }
+
+
 
     @Transactional
     @KafkaListener(topics = "parcelRegistrationTest")
@@ -49,14 +59,14 @@ public class ParcelRegistrationConsumer {
         log.info("idTo==> " + idTo);
         PostOffice postOffice = postOfficeService.getById(idTo);
         log.info("postOffice"+postOffice);
-
-        produce(postOffice);
+        PostOfficeDTO postOfficeDTO= modelMapper.map(postOffice, PostOfficeDTO.class);
+        produce(postOfficeDTO);
 
         System.out.println("----");
     }
 
 
-    public static void produce(PostOffice postOffice) {
+    public static void produce(PostOfficeDTO postOffice) {
         System.out.println("PostOfficeRegistrationProducer.send");
         Properties props = null;
         {
@@ -73,12 +83,12 @@ public class ParcelRegistrationConsumer {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "io.confluent.kafka.serializers.KafkaJsonSerializer");
 
-        Producer<String, PostOffice> producer = new KafkaProducer<String, PostOffice>(props);
+        Producer<String, PostOfficeDTO> producer = new KafkaProducer<String, PostOfficeDTO>(props);
 
         String key = "postOfficeKey";
 
         System.out.printf("Producing record: %s\t%s%n", key, postOffice);
-        producer.send(new ProducerRecord<String, PostOffice>(topic, key, postOffice), new Callback() {
+        producer.send(new ProducerRecord<String, PostOfficeDTO>(topic, key, postOffice), new Callback() {
             @Override
             public void onCompletion(RecordMetadata m, Exception e) {
                 if (e != null) {
@@ -107,7 +117,7 @@ public class ParcelRegistrationConsumer {
 
 
 
-    /*public void produce(PostOffice postOffice) {
+    /*public void produce(PostOfficeDTO postOffice) {
         System.out.println("ProducerExample");
             final String key = "postOfficeKey";
             log.info("Producing record: {}\t{}", key, postOffice);

@@ -1,7 +1,7 @@
 package com.post.menagment.services;
 
 import com.google.gson.Gson;
-import com.post.menagment.dto.Parcel;
+import com.post.menagment.dto.ParcelDTO;
 import com.post.menagment.dto.ParcelRegistrationCompleted;
 import com.post.menagment.model.PostOffice;
 import lombok.RequiredArgsConstructor;
@@ -33,24 +33,23 @@ public class ParcelRegistrationEvent {
     }
 
     @Transactional
-    @KafkaListener(topics = "parcelRegistration")
-    public void consume(final ConsumerRecord<String, Parcel> consumedParcel) {
+    @KafkaListener(topics = "parcelRegistrationInit")
+    public void consume(final ConsumerRecord<String, ParcelDTO> consumedParcel) {
         if(consumedParcel.key().equals("parcelRegistrationInitiate")) {
             System.out.println();
             Gson gson = new Gson();
-            Parcel parcel = gson.fromJson(String.valueOf(consumedParcel.value()), Parcel.class);
-            Long idTo = parcel.getIdTo();
+            ParcelDTO parcelDTO = gson.fromJson(String.valueOf(consumedParcel.value()), ParcelDTO.class);
+            Long idTo = parcelDTO.getIdTo();
             PostOffice postOffice = postOfficeService.getById(idTo);
-            ParcelRegistrationCompleted sprc = new ParcelRegistrationCompleted(parcel, postOffice.getIsWorking());
+            ParcelRegistrationCompleted sprc = new ParcelRegistrationCompleted(parcelDTO, postOffice.getIsWorking());
             produce(sprc);
         }
     }
 
     public void produce(ParcelRegistrationCompleted postOffice) {
-        System.out.println("ProducerExample");
             final String key = "parcelRegistrationCompleted";
             log.info("Producing record: {}\t{}", key, postOffice);
-            producer.send("postOffice", key, postOffice).addCallback(
+            producer.send("parcelRegistration", key, postOffice).addCallback(
                     result -> {
                         final RecordMetadata m;
                         if (result != null) {

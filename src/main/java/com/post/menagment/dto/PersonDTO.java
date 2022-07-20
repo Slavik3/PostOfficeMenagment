@@ -1,6 +1,6 @@
 package com.post.menagment.dto;
 
-public abstract class Person {
+public abstract class PersonDTO {
 
     private Long id;
     private String name;

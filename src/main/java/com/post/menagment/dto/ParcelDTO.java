@@ -1,16 +1,17 @@
 package com.post.menagment.dto;
 
-public class Parcel {
+import java.util.Objects;
 
+public class ParcelDTO {
     private Long id;
     private String name;
     private int weight;
     private long idFrom;
     private long idTo;
 
-    private Sender sender;
+    private SenderDTO sender;
 
-    private Recipient recipient;
+    private RecipientDTO recipient;
 
     public long getId() {
         return id;
@@ -52,26 +53,23 @@ public class Parcel {
         this.idTo = idTo;
     }
 
-    public Sender getSender() {
+    public SenderDTO getSender() {
         return sender;
     }
 
-    public void setSender(Sender sender) {
+    public void setSender(SenderDTO sender) {
         this.sender = sender;
     }
 
-    public Recipient getRecipient() {
+    public RecipientDTO getRecipient() {
         return recipient;
     }
 
-    public void setRecipient(Recipient recipient) {
+    public void setRecipient(RecipientDTO recipient) {
         this.recipient = recipient;
     }
 
-    public Parcel() {
-    }
-
-    public Parcel(Long id, String name, int weight, long idFrom, long idTo, Sender sender, Recipient recipient) {
+    public ParcelDTO(Long id, String name, int weight, long idFrom, long idTo, SenderDTO sender, RecipientDTO recipient) {
         this.id = id;
         this.name = name;
         this.weight = weight;
@@ -82,8 +80,21 @@ public class Parcel {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParcelDTO parcelDTO = (ParcelDTO) o;
+        return weight == parcelDTO.weight && idFrom == parcelDTO.idFrom && idTo == parcelDTO.idTo && Objects.equals(id, parcelDTO.id) && Objects.equals(name, parcelDTO.name) && Objects.equals(sender, parcelDTO.sender) && Objects.equals(recipient, parcelDTO.recipient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, weight, idFrom, idTo, sender, recipient);
+    }
+
+    @Override
     public String toString() {
-        return "Parcel{" +
+        return "ParcelDTO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", weight=" + weight +

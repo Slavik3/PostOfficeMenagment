@@ -1,6 +1,6 @@
 package com.post.menagment.dto;
 
-public class SendParcelRegistrationCompleted {
+public class ParcelRegistrationCompleted {
     private Parcel parcel;
     private Boolean isPostOfficeAvailable;
 
@@ -20,7 +20,7 @@ public class SendParcelRegistrationCompleted {
         isPostOfficeAvailable = isPostOfficeAvailable;
     }
 
-    public SendParcelRegistrationCompleted(Parcel parcel, Boolean isPostOfficeAvailable) {
+    public ParcelRegistrationCompleted(Parcel parcel, Boolean isPostOfficeAvailable) {
         this.parcel = parcel;
         this.isPostOfficeAvailable = isPostOfficeAvailable;
     }

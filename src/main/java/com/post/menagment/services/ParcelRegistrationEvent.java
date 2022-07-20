@@ -19,16 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ParcelRegistrationEvent {
-
     private final KafkaTemplate<String, ParcelRegistrationCompleted> producer;
-
     private PostOfficeService postOfficeService;
-    private ModelMapper modelMapper;
 
     @Autowired
-    public ParcelRegistrationEvent(PostOfficeService postOfficeService, ModelMapper modelMapper, KafkaTemplate<String, ParcelRegistrationCompleted> producer) {
+    public ParcelRegistrationEvent(PostOfficeService postOfficeService, KafkaTemplate<String, ParcelRegistrationCompleted> producer) {
         this.postOfficeService = postOfficeService;
-        this.modelMapper = modelMapper;
         this.producer = producer;
     }
 
@@ -36,7 +32,6 @@ public class ParcelRegistrationEvent {
     @KafkaListener(topics = "parcelRegistrationInit")
     public void consume(final ConsumerRecord<String, ParcelDTO> consumedParcel) {
         if(consumedParcel.key().equals("parcelRegistrationInitiate")) {
-            System.out.println();
             Gson gson = new Gson();
             ParcelDTO parcelDTO = gson.fromJson(String.valueOf(consumedParcel.value()), ParcelDTO.class);
             Long idTo = parcelDTO.getIdTo();

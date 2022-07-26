@@ -1,0 +1,100 @@
+docker images
+docker container ls
+
+minikube start
+minikube dashboard
+eval $(minikube docker-env)
+
+mvn clean install -DskipTests=true
+docker build -t post-office-menagment:1.0 .
+
+cd src/main/resources
+kubectl apply -f postgres-credentials.yml
+kubectl apply -f postgres-configmap.yml
+kubectl apply -f postgres-deployment.yml
+kubectl apply -f deployment.yml
+kubectl get pods
+kubectl logs springboot-postgres-k8s-fb8667ff-4cqxw
+
+kubectl get services
+minikube service springboot-postgres-k8s --url
+
+kubectl exec -it postgres-bb9cb9b45-tk7r5 -- /bin/sh
+
+
+kubectl describe pod springboot-postgres-k8s-fb8667ff-6pn2f
+
+
+kubectl exec -it springboot-postgres-k8s-74487bc7f6-md7xl bash
+psql -h postgres -U postgres
+
+
+psql -h 172.17.0.5 -p 5432 -U postgres -d post_office_menagment
+
+
+cpostgres-6df5844bdd-kv6rl -- /bin/bash
+
+
+cd /
+find * | grep postgresql.conf
+
+
+minikube start --vm-driver=virtualbox.  Стартуем minikube
+./scripts/kube-dashboard.sh.     запускаем dashboard
+Загружаем образ
+scripts/kube-deploy.sh. Затеплить образ
+
+
+sudo lsof -i :5432
+sudo kill -9 472
+
+minikube service post-office-app
+
+
+
+kubectl patch svc post-office-service -p '{"spec":{"externalIPs":["192.168.0.194"]}}'
+kubectl patch svc springboot-postgres-k8s -p '{"spec":{"externalIPs":["192.168.0.194"]}}'
+
+
+
+Найти процессы находящиеся на порту и убить
+sudo lsof -i :5432
+sudo kill -9 128
+
+
+psql -h $(postgres -i) -U postgres
+
+
+psql -h localhost -U postgres --password -p 30622 post_office_menagment
+
+helm install dev-pg bitnami/postgresql --set primary.persistence.existingClaim=pg-pvc,auth.postgresPassword=12345
+
+
+psql -h $(hostname -i) -U postgres
+
+echo -n "postgres" | base64
+
+
+kubectl expose deployment springboot-postgres-k8s --type=LoadBalancer --name=my-service
+kubectl get deployments springboot-postgres-k8s
+
+kubectl exec springboot-postgres-k8s-fb8667ff-8f664 -- printenv | grep SERVICE
+
+kubectl expose deployment springboot-postgres-k8s —name=springboot-postgres-k8s —port= 8080 —target-port=8080 —type=LoadBalancer
+
+get http://192.168.59.100:30163/post-office/1/availability
+post http://192.168.59.100:30163/post-office
+
+https://www.enterprisedb.com/blog/how-deploy-pgadmin-kubernetes - add pgAdminn
+user@domain.com
+SuperSecret
+
+
+CREATE TABLE post_office (
+	id int NOT NULL,
+	adress VARCHAR ( 50 ),
+	is_working BOOLEAN);
+
+
+Докер - creates an isolated environment for the application.
+Кубернетис - manages the docker container infrastructure

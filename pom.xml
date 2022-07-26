@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.post</groupId>
-	<artifactId>PostOfficeMenagment</artifactId>
+	<artifactId>post-office-menagment</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>PostOfficeMenagment</name>
 	<description>Post Office Menagment</description>

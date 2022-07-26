@@ -1,0 +1,59 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: post-office-menagment
+  labels:
+    name: post-office-menagment
+spec:
+  ports:
+    - nodePort: 30163
+      port: 8081
+      targetPort: 8081
+      protocol: TCP
+  selector:
+    app: post-office-menagment
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: post-office-menagment
+spec:
+  selector:
+    matchLabels:
+      app: post-office-menagment
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: post-office-menagment
+    spec:
+      containers:
+        - name: post-office-menagment
+          image: post-office-menagment:1.0
+          ports:
+            - containerPort: 8081
+          env:   # Setting Enviornmental Variables
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-conf-pom  # name of configMap
+                  key: host
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-conf-pom
+                  key: name
+            - name: POSTGRES_USER  # Setting Database username from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials # Secret Name
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD # Setting Database password from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: postgres_password
+
+

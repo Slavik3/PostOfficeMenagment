@@ -3,7 +3,6 @@ package com.post.menagment.dto;
 import java.util.Objects;
 
 public class ParcelDTO {
-    private Long id;
     private String name;
     private int weight;
     private long idFrom;
@@ -12,14 +11,6 @@ public class ParcelDTO {
     private SenderDTO sender;
 
     private RecipientDTO recipient;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -69,8 +60,10 @@ public class ParcelDTO {
         this.recipient = recipient;
     }
 
-    public ParcelDTO(Long id, String name, int weight, long idFrom, long idTo, SenderDTO sender, RecipientDTO recipient) {
-        this.id = id;
+    public ParcelDTO() {
+    }
+
+    public ParcelDTO(String name, int weight, long idFrom, long idTo, SenderDTO sender, RecipientDTO recipient) {
         this.name = name;
         this.weight = weight;
         this.idFrom = idFrom;
@@ -84,24 +77,11 @@ public class ParcelDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParcelDTO parcelDTO = (ParcelDTO) o;
-        return weight == parcelDTO.weight && idFrom == parcelDTO.idFrom && idTo == parcelDTO.idTo && Objects.equals(id, parcelDTO.id) && Objects.equals(name, parcelDTO.name) && Objects.equals(sender, parcelDTO.sender) && Objects.equals(recipient, parcelDTO.recipient);
+        return weight == parcelDTO.weight && idFrom == parcelDTO.idFrom && idTo == parcelDTO.idTo && Objects.equals(name, parcelDTO.name) && Objects.equals(sender, parcelDTO.sender) && Objects.equals(recipient, parcelDTO.recipient);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, weight, idFrom, idTo, sender, recipient);
-    }
-
-    @Override
-    public String toString() {
-        return "ParcelDTO{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", weight=" + weight +
-                ", idFrom=" + idFrom +
-                ", idTo=" + idTo +
-                ", sender=" + sender +
-                ", recipient=" + recipient +
-                '}';
+        return Objects.hash(name, weight, idFrom, idTo, sender, recipient);
     }
 }

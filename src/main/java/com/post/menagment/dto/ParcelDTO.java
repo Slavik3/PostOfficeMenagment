@@ -84,4 +84,16 @@ public class ParcelDTO {
     public int hashCode() {
         return Objects.hash(name, weight, idFrom, idTo, sender, recipient);
     }
+
+    @Override
+    public String toString() {
+        return "ParcelDTO{" +
+                "name='" + name + '\'' +
+                ", weight=" + weight +
+                ", idFrom=" + idFrom +
+                ", idTo=" + idTo +
+                ", sender=" + sender +
+                ", recipient=" + recipient +
+                '}';
+    }
 }

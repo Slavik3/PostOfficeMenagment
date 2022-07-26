@@ -28,7 +28,7 @@ public class ParcelRegistrationEvent {
     }
 
     @Transactional
-    @KafkaListener(topics = "parcelRegistrationInit1")
+    @KafkaListener(topics = "parcelRegistrationInit2")
     public void consume(final ConsumerRecord<String, ParcelDTO> consumedParcel) {
         if(consumedParcel.key().equals("parcelRegistrationInitiate")) {
             Gson gson = new Gson();
@@ -43,7 +43,7 @@ public class ParcelRegistrationEvent {
     public void produce(ParcelRegistrationCompleted postOffice) {
             final String key = "parcelRegistrationCompleted";
             log.info("Producing record: {}\t{}", key, postOffice);
-            producer.send("parcelRegistration1", key, postOffice).addCallback(
+            producer.send("parcelRegistration2", key, postOffice).addCallback(
                     result -> {
                         final RecordMetadata m;
                         if (result != null) {

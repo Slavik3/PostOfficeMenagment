@@ -10,16 +10,11 @@ public class PostOfficeMenagmentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PostOfficeMenagmentApplication.class, args);
-
-		/*Long id  = */ /*ParcelRegistrationConsumer parcelRegistrationConsumer= new ParcelRegistrationConsumer();
-		parcelRegistrationConsumer.consum();*/
-//PostOfficeService.isPostOfficeAvailable(id)
 	}
 
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
 	}
-
 
 }
